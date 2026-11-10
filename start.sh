@@ -2,6 +2,10 @@
 # シェアファイル 起動スクリプト（ダブルクリック用の ShareFile-start.desktop から呼ばれます）
 set -u
 cd "$(dirname "$(readlink -f "$0")")" || exit 1
+# 端末なしで実行された場合(「プログラムとして実行」等)は、端末を開いてやり直す
+if [ ! -t 0 ] && [ -z "${SHAREFILE_IN_TERM:-}" ] && command -v gnome-terminal >/dev/null; then
+  exec gnome-terminal --title="シェアファイル 起動" -- env SHAREFILE_IN_TERM=1 "$PWD/$(basename "$0")"
+fi
 ROOT="$PWD"
 RUN_DIR="$ROOT/.run"
 PID_FILE="$RUN_DIR/sharefile.pid"

@@ -2,6 +2,9 @@
 # シェアファイル 停止スクリプト。Tailscale全体や他のアプリは停止しません。
 set -u
 cd "$(dirname "$(readlink -f "$0")")" || exit 1
+if [ ! -t 0 ] && [ -z "${SHAREFILE_IN_TERM:-}" ] && command -v gnome-terminal >/dev/null; then
+  exec gnome-terminal --title="シェアファイル 停止" -- env SHAREFILE_IN_TERM=1 "$PWD/$(basename "$0")"
+fi
 ROOT="$PWD"
 PID_FILE="$ROOT/.run/sharefile.pid"
 PORT="$(".venv/bin/python" -c 'from app.config import load_settings; print(load_settings().port)' 2>/dev/null || echo 8765)"
