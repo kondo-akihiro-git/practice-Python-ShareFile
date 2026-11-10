@@ -1,6 +1,8 @@
 # シェアファイル（ShareFile）
 
-Ubuntu PC と iPhone の間で、ファイルを双方向に共有する個人用の Web システムです。Tailscale VPN の中だけで動き、独自のログインはありません。
+Ubuntu PC と iPhone の間で、ファイルを双方向に共有する個人用 Web システムです。Tailscale VPN の中だけで動き、ログインは不要です。
+
+左から、iPhone のトップ画面、アップロード画面、Ubuntu の共有フォルダです。
 
 <kbd>
 <img width="603" height="1311" alt="IMG_2296" src="https://github.com/user-attachments/assets/682afacc-12f5-4e40-aa8a-8811f81f9c91" />
@@ -17,28 +19,35 @@ Ubuntu PC と iPhone の間で、ファイルを双方向に共有する個人�
 </kbd>
 </br></br>
 
-## 特徴
+## 使い方
 
-- Ubuntu の `shared/` フォルダの実ファイルを直接扱います。ファイルマネージャーでの追加・削除も、約5秒で Web に反映されます。
-- アップロードしたファイルは、圧縮・変換せずバイナリのまま保存します。アップロード後に SHA-256 を照合します。
-- 一覧、検索、並び替え、フォルダ作成、名前変更、移動、削除（ゴミ箱へ移動）に対応しています。
-- 画像、PDF、動画、テキストをブラウザでプレビューできます。
-- iPhone では、共有シートから写真アプリやファイルアプリへ保存できます。
+**iPhone → Ubuntu**
+1. Ubuntu でデスクトップの「シェアファイル 起動」をダブルクリックします。
+2. iPhone で Tailscale をオンにし、シェアファイルを開きます。
+3. 「アップロード」でファイルを選び、保存先を決めて送ります。
+4. Ubuntu の `shared/` フォルダに、そのままのファイルが入ります。
 
-## 技術構成
+**Ubuntu → iPhone**
+1. Ubuntu の `shared/` フォルダにファイルを置きます。
+2. 数秒で iPhone の一覧に出ます。
+3. ファイルを開き、「ダウンロード」か「写真に保存」で iPhone に取り込みます。
 
-- Python 3.12、Starlette、uvicorn
-- フロントエンド: 標準の HTML・CSS・JavaScript（フレームワークなし）
-- ネットワーク: Tailscale Serve（HTTPS、tailnet 内のみ）
+停止は「シェアファイル 停止」をダブルクリックします。設定方法は [docs/起動停止手順.md](docs/起動停止手順.md) を参照してください。
 
-## ディレクトリ
+## できること
 
-- `app/`: サーバーと画面（`static/`）
+- アップロード（複数可）・ダウンロード。圧縮や変換はせず、SHA-256 で一致を確認します。
+- 一覧、検索、並び替え、フォルダ作成、名前変更、移動、削除（`trash/` へ退避）。
+- 画像・PDF・動画・テキストのプレビュー。
+- `shared/` を直接見るので、Ubuntu 側の変更は約5秒で反映されます。
+
+## 構成
+
+Python 3.12、Starlette、uvicorn、標準の HTML・CSS・JavaScript、Tailscale Serve（HTTPS）。
+
+- `app/`: サーバーと画面
 - `config/sharefile.env`: 設定
 - `shared/`: 共有フォルダ
-- `trash/`: 削除したファイルの退避先
-- `logs/`: ログ
-- `tests/`: テスト
-- `docs/`: 手順書とテスト結果
-- `start.sh`、`stop.sh`: 起動・停止スクリプト
-
+- `trash/`、`logs/`: ゴミ箱、ログ
+- `tests/`、`docs/`: テストと手順書
+- `start.sh`、`stop.sh`: 起動・停止
