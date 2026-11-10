@@ -4,14 +4,17 @@
 このアプリは、**Ubuntu PCとiPhoneの間で、ファイルを双方向に共有できる**個人用Webアプリです。  
 Tailscale VPNの中だけで動き、ログインは不要です。ファイルはUbuntuの`shared/`フォルダにそのまま保存されます。
 
-<br>
-主な機能
+&nbsp;
+
+**主な機能**
+
 - iPhoneからのアップロード（複数可・保存先フォルダの選択・新規フォルダ作成）
 - iPhoneへのダウンロード、「写真に保存」「ファイルに保存」
 - 画像・PDF・動画・テキストのプレビュー
 - 検索、並び替え、フォルダ作成、名前変更、移動、削除（`trash/`へ退避）
 - Ubuntu側で`shared/`を変更すると、約5秒でWeb画面に反映
 - 圧縮・変換をせず、SHA-256でアップロードの一致を確認
+
 ---
 
 ## 利用の流れ
@@ -64,6 +67,7 @@ Tailscale VPNの中だけで動き、ログインは不要です。ファイル�
   - `test-results.md` : テスト結果
 - `start.sh` / `stop.sh` : 起動・停止スクリプト
 - `requirements.txt` : 依存ライブラリ定義
+
 ---
 
 ## 主な技術要件
@@ -71,6 +75,7 @@ Tailscale VPNの中だけで動き、ログインは不要です。ファイル�
 - Starlette / uvicorn : Webフレームワーク・サーバー
 - HTML / CSS / JavaScript : フロントエンド実装（ビルド不要）
 - Tailscale Serve : iPhoneからのHTTPSアクセス（tailnet内のみ）
+
 ---
 
 ## 起動方法
