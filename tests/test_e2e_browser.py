@@ -162,10 +162,10 @@ def test_browser_flow(live_server, playwright_ctx, tmp_path, label, engine, devi
     assert page.locator("#pv-download").is_visible()  # 非対応形式でもダウンロード導線あり
     page.click("#pv-close")
 
-    # ハッシュ表示
+    # SHA-256ボタンは廃止、保存ボタンは共有対応ブラウザのみ
     page.click(".row .name:text-is('photo.jpg')")
-    page.click("#pv-hash")
-    wait_js(page, f"document.querySelector('#pv-info').textContent.includes('{sha(SAMPLES['photo.jpg'])}')")
+    assert page.locator("#pv-hash").count() == 0
+    assert page.evaluate("!!(navigator.canShare && navigator.share)") == page.locator("#pv-save").is_visible()
 
     # 名前変更
     page.click("#pv-rename")

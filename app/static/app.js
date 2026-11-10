@@ -161,13 +161,15 @@ function go(p) { state.path = p; state.q = ""; $("search").value = ""; state.sig
 window.addEventListener("popstate", () => { state.path = pathFromHash(); load(); });
 
 // ---- 詳細・プレビュー ----
+const fileMeta = (e) => e.is_dir ? "" : `${fmtSize(e.size)} ・ ${fmtTime(e.mtime)}`;
 async function openDetail(e) {
   state.current = e;
-  $("pv-name").textContent = e.name; $("pv-info").textContent = "";
+  $("pv-name").textContent = e.name; $("pv-info").textContent = fileMeta(e);
   const body = $("pv-body"); body.replaceChildren();
   const url = fileUrl(e.path);
   $("pv-download").hidden = e.is_dir; $("pv-download").href = fileUrl(e.path, true); $("pv-download").setAttribute("download", e.name);
-  $("pv-hash").hidden = false;
+  $("pv-save").hidden = e.is_dir || !(navigator.canShare && navigator.share);
+  $("pv-save").lastChild.textContent = e.kind === "image" || e.kind === "video" ? "写真に保存" : "ファイルに保存";
   if (e.is_dir) body.append(h("div", { class: "nopv" }, withIcon("folder", "フォルダ")));
   else if (e.kind === "image") {
     const img = h("img", { src: url, alt: e.name });
@@ -186,12 +188,21 @@ async function openDetail(e) {
 function closeDetail() { const d = $("dlg-preview"); if (d.open) d.close(); $("pv-body").replaceChildren(); }
 $("pv-close").onclick = closeDetail;
 $("dlg-preview").addEventListener("click", (ev) => { if (ev.target === $("dlg-preview")) closeDetail(); });
-$("pv-hash").onclick = async () => {
-  const e = state.current; $("pv-info").textContent = "計算中…";
+const SHARE_MAX = 300 * 1024 * 1024;
+$("pv-save").onclick = async () => {
+  const e = state.current;
+  if (e.size > SHARE_MAX) { toast("大きいファイルは「ダウンロード」を使ってください（上限300MB）", true); return; }
+  const btn = $("pv-save"); btn.disabled = true; $("pv-info").textContent = "準備中…";
   try {
-    const d = await api("/api/info?hash=1&path=" + encodeURIComponent(e.path));
-    $("pv-info").textContent = d.is_dir ? `フォルダ内 ${d.item_count} 件 ・ /${d.path}` : `${fmtSize(d.size)} ・ ${fmtTime(d.mtime)} ・ /${d.path} ・ SHA-256: ${d.sha256}`;
-  } catch (err) { $("pv-info").textContent = err.message; }
+    const r = await fetch(fileUrl(e.path, true));
+    if (!r.ok) throw new Error("取得に失敗しました");
+    const blob = await r.blob();
+    const f = new File([blob], e.name, { type: r.headers.get("Content-Type") || "application/octet-stream" });
+    if (!navigator.canShare({ files: [f] })) throw new Error("このブラウザでは共有保存に対応していません。「ダウンロード」を使ってください");
+    $("pv-info").textContent = "";
+    await navigator.share({ files: [f] });
+  } catch (err) { if (err.name !== "AbortError") toast(err.message, true); }
+  finally { btn.disabled = false; $("pv-info").textContent = fileMeta(e); }
 };
 $("pv-rename").onclick = () => doRename(state.current);
 $("pv-move").onclick = () => doMove(state.current);
