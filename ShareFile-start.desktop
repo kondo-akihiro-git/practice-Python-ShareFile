@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=シェアファイル 起動
+Comment=シェアファイルを起動します
+Exec=bash -c 'exec "$(dirname "$1")/start.sh"' _ %k
+Icon=folder-publicshare
+Terminal=true
+Categories=Network;

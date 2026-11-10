@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=シェアファイル 停止
+Comment=シェアファイルを停止します
+Exec=bash -c 'exec "$(dirname "$1")/stop.sh"' _ %k
+Icon=process-stop
+Terminal=true
+Categories=Network;

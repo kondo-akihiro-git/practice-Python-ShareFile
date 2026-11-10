@@ -1,0 +1,10 @@
+.venv/
+.run/
+__pycache__/
+.pytest_cache/
+logs/*
+!logs/.gitkeep
+trash/*
+!trash/.gitkeep
+shared/*
+!shared/.gitkeep

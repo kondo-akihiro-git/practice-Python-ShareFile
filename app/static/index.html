@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#2563eb">
+<title>シェアファイル</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo" aria-hidden="true">📂</span><h1>シェアファイル</h1></div>
+  <button id="btn-refresh" class="icon-btn" title="更新" aria-label="更新">⟳</button>
+</header>
+
+<main>
+  <nav id="crumbs" class="crumbs" aria-label="現在のフォルダ"></nav>
+
+  <section class="toolbar">
+    <button id="btn-upload" class="btn primary">⬆ アップロード</button>
+    <button id="btn-mkdir" class="btn">📁＋ フォルダ作成</button>
+    <input id="search" type="search" placeholder="ファイル名で検索" aria-label="ファイル名で検索" autocomplete="off">
+    <label class="chk"><input id="recursive" type="checkbox"> サブフォルダも</label>
+    <div class="sort">
+      <select id="sort" aria-label="並び替え">
+        <option value="name">名前</option>
+        <option value="mtime">更新日時</option>
+        <option value="size">サイズ</option>
+      </select>
+      <button id="order" class="btn" aria-label="昇順・降順の切り替え" title="昇順・降順">↑ 昇順</button>
+    </div>
+  </section>
+
+  <div id="status" class="status" role="status"></div>
+  <ul id="list" class="list"></ul>
+  <button id="more" class="btn more" hidden>さらに表示</button>
+</main>
+
+<div id="uploads" class="uploads" hidden></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="dropzone" class="dropzone" hidden>ここにドロップしてアップロード</div>
+
+<dialog id="dlg-upload">
+  <form method="dialog" class="dlg" id="form-upload">
+    <h2>アップロード</h2>
+    <label>アップロード先フォルダ
+      <select id="up-dest"></select>
+    </label>
+    <label>新しいフォルダを作って、その中へ入れる（任意）
+      <input id="up-newdir" type="text" placeholder="フォルダ名" autocomplete="off">
+    </label>
+    <label>ファイル（複数選択可）
+      <input id="up-files" type="file" multiple>
+    </label>
+    <p class="hint">iPhoneの「写真」から選ぶと、iOSがHEIC→JPEG等へ変換する場合があります。元のデータのまま送るには「ファイル」アプリ経由で選択してください。シェアファイルは受け取ったデータを一切加工せずそのまま保存します。</p>
+    <div class="actions"><button value="cancel" class="btn">キャンセル</button><button id="up-start" value="ok" class="btn primary">アップロード開始</button></div>
+  </form>
+</dialog>
+
+<dialog id="dlg-prompt">
+  <form method="dialog" class="dlg" id="form-prompt">
+    <h2 id="pr-title"></h2>
+    <input id="pr-input" type="text" autocomplete="off">
+    <div class="actions"><button value="cancel" class="btn">キャンセル</button><button value="ok" class="btn primary" id="pr-ok">OK</button></div>
+  </form>
+</dialog>
+
+<dialog id="dlg-confirm">
+  <form method="dialog" class="dlg">
+    <h2 id="cf-title"></h2>
+    <p id="cf-msg"></p>
+    <div class="actions" id="cf-actions"></div>
+  </form>
+</dialog>
+
+<dialog id="dlg-move">
+  <form method="dialog" class="dlg" id="form-move">
+    <h2 id="mv-title">移動先を選択</h2>
+    <select id="mv-dest"></select>
+    <div class="actions"><button value="cancel" class="btn">キャンセル</button><button value="ok" class="btn primary">移動</button></div>
+  </form>
+</dialog>
+
+<dialog id="dlg-preview" class="preview">
+  <div class="pv-head">
+    <strong id="pv-name"></strong>
+    <button id="pv-close" class="icon-btn" aria-label="閉じる">✕</button>
+  </div>
+  <div id="pv-body" class="pv-body"></div>
+  <div id="pv-info" class="pv-info"></div>
+  <div class="pv-actions">
+    <a id="pv-download" class="btn primary">⬇ ダウンロード</a>
+    <button id="pv-hash" class="btn">ℹ 情報 / SHA-256</button>
+    <button id="pv-rename" class="btn">✏ 名前変更</button>
+    <button id="pv-move" class="btn">📂 移動</button>
+    <button id="pv-delete" class="btn danger">🗑 削除</button>
+  </div>
+</dialog>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
