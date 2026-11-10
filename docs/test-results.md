@@ -19,8 +19,8 @@
 ## 14-2 双方向連携
 | 項目 | 結果 |
 |---|---|
-| テストA iPhone実機→Ubuntu | **未実施**（実機なし） |
-| テストB Ubuntu→iPhone実機 | **未実施**（実機なし） |
+| テストA iPhone実機→Ubuntu | **一部成功**（2026-11-10 iPhoneのブラウザからTailscale経由でPNG 2枚をアップロードし、画面上でSHA-256一致を確認。`shared/` に保存されたことをUbuntu側で確認。使用したブラウザは未記録。画像は `docs/images/`） |
+| テストB Ubuntu→iPhone実機 | **未実施**（一覧表示は確認済み。ダウンロードして開く確認は未実施） |
 | 代替: ブラウザからのアップロードがshared/に実ファイルとして保存 | 成功（自動） |
 | 代替: shared/に直接置いたファイルが一覧に反映・DLできる | 成功（自動、E2E） |
 | Ubuntuファイルマネージャー(Nautilus)GUIでの目視 | 未実施（同じ実ディレクトリを直接参照しているため構造上同一だが、GUI確認はしていない） |
@@ -65,4 +65,4 @@ HTMLなど危険な型はインライン表示せず添付DL＋nosniff: 成功�
 |---|---|
 | start.sh 初回(venv作成・依存導入)／2回目(二重起動せず)／起動確認 | 成功 |
 | ShareFile-start.desktop / stop.desktop を `gio launch` で起動・停止 | 成功（実際のダブルクリック操作ではなくgio経由） |
-| Tailscale確認・Tailscale Serve設定 | **未実施**（このPCにtailscale未インストール。スクリプトの該当分岐は未検証） |
+| Tailscale確認・Tailscale Serve設定 | 成功（Tailscale 1.104.5導入、Serve設定、`https://…ts.net:8443/`でアップロード/ダウンロード/削除のSHA-256一致をUbuntuから確認。iPhoneからのアクセスも確認） |
