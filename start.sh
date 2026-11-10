@@ -119,5 +119,9 @@ echo "=============================================="
 if [ -n "${DISPLAY:-}${WAYLAND_DISPLAY:-}" ] && command -v xdg-open >/dev/null; then
   xdg-open "$LOCAL_URL" >/dev/null 2>&1 &
 fi
-if [ -t 0 ]; then echo; read -r -t 20 -p "Enterキーで画面を閉じます（20秒後に自動で閉じます。サーバーは動き続けます）" _ || true; fi
+if [ -t 0 ]; then
+  echo
+  echo "▼ アクセスログ（この画面を閉じても、サーバーは裏で動き続けます。停止は ShareFile-stop.desktop）"
+  exec tail -n 20 -F "$LOGDIR/server.log"
+fi
 exit 0
