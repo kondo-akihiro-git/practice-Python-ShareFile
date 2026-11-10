@@ -1,7 +1,37 @@
 "use strict";
 (() => {
 const $ = (id) => document.getElementById(id);
-const ICONS = { folder: "📁", image: "🖼️", pdf: "📕", video: "🎞️", text: "📄", file: "📦" };
+const FILE_P = '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/>';
+const FOLDER_P = '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>';
+const SVG = {
+  folder: FOLDER_P, "folder-plus": FOLDER_P + '<path d="M12 10v6M9 13h6"/>',
+  image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>',
+  video: '<rect x="3" y="4" width="18" height="16" rx="3"/><path d="m10 9 5 3-5 3Z"/>',
+  text: FILE_P + '<path d="M10 9H8M16 13H8M16 17H8"/>',
+  pdf: FILE_P + '<path d="M9 13h6M9 17h3"/>',
+  file: FILE_P,
+  upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
+  download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
+  refresh: '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+  x: '<path d="M18 6 6 18M6 6l12 12"/>',
+  rename: '<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>',
+  move: '<path d="m15 14 5-5-5-5"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/>',
+  trash: '<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6M14 11v6"/>',
+  more: '<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+  home: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  up: '<path d="m5 12 7-7 7 7M12 19V5"/>', down: '<path d="M12 5v14m7-7-7 7-7-7"/>',
+  "chevron-right": '<path d="m9 18 6-6-6-6"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  alert: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4M12 17h.01"/>',
+};
+const svg = (name) => {
+  const el = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  el.setAttribute("viewBox", "0 0 24 24"); el.setAttribute("class", "i"); el.setAttribute("aria-hidden", "true");
+  el.innerHTML = SVG[name] || SVG.file;
+  return el;
+};
+const withIcon = (name, text) => [svg(name), text ? h("span", {}, text) : null];
+document.querySelectorAll("[data-i]").forEach((el) => el.replaceChildren(svg(el.dataset.i)));
 const PAGE = 200;
 const state = {
   path: "", sort: localStorage.getItem("sf.sort") || "name", order: localStorage.getItem("sf.order") || "asc",
@@ -76,11 +106,11 @@ function renderCrumbs() {
   const items = [["共有フォルダ", ""]]; let acc = "";
   for (const p of parts) { acc = join(acc, p); items.push([p, acc]); }
   items.forEach(([label, p], i) => {
-    if (i) nav.append(h("span", { class: "sep" }, "›"));
+    if (i) nav.append(h("span", { class: "sep" }, svg("chevron-right")));
     if (i === items.length - 1) nav.append(h("span", { class: "cur" }, label));
-    else nav.append(h("button", { onclick: () => go(p) }, i === 0 ? "🏠 " + label : label));
+    else nav.append(h("button", { onclick: () => go(p) }, i === 0 ? withIcon("home", label) : label));
   });
-  if (parts.length) nav.append(h("button", { onclick: () => go(parentOf(state.path)), title: "上位フォルダへ" }, "⬆ 上へ"));
+  if (parts.length) nav.append(h("button", { onclick: () => go(parentOf(state.path)), title: "上位フォルダへ" }, withIcon("up", "上へ")));
 }
 
 function renderList() {
@@ -91,16 +121,16 @@ function renderList() {
     const where = state.q && state.recursive ? " ・ /" + parentOf(e.path) : "";
     const row = h("li", { class: "row" },
       h("button", { class: "main", onclick: open },
-        h("span", { class: "ic", "aria-hidden": "true" }, ICONS[e.kind] || ICONS.file),
+        h("span", { class: "ic k-" + (e.is_dir ? "folder" : e.kind), "aria-hidden": "true" }, svg(e.is_dir ? "folder" : (SVG[e.kind] ? e.kind : "file"))),
         h("span", { class: "txt" },
           h("div", { class: "name" }, e.name),
           h("div", { class: "meta" }, [typeLabel(e), e.is_dir ? null : fmtSize(e.size), fmtTime(e.mtime)].filter(Boolean).join(" ・ ") + where))),
       h("div", { class: "acts" },
-        e.is_dir ? null : h("a", { class: "act", href: fileUrl(e.path, true), title: "ダウンロード", "aria-label": "ダウンロード" }, "⬇"),
-        h("button", { class: "act", title: "名前変更", "aria-label": "名前変更", onclick: () => doRename(e) }, "✏"),
-        h("button", { class: "act", title: "移動", "aria-label": "移動", onclick: () => doMove(e) }, "📂"),
-        h("button", { class: "act del", title: "削除", "aria-label": "削除", onclick: () => doDelete(e) }, "🗑")),
-      h("button", { class: "act ovf", "aria-label": "操作メニュー", onclick: () => openDetail(e) }, "⋯"));
+        e.is_dir ? null : h("a", { class: "act", href: fileUrl(e.path, true), title: "ダウンロード", "aria-label": "ダウンロード" }, svg("download")),
+        h("button", { class: "act", title: "名前変更", "aria-label": "名前変更", onclick: () => doRename(e) }, svg("rename")),
+        h("button", { class: "act", title: "移動", "aria-label": "移動", onclick: () => doMove(e) }, svg("move")),
+        h("button", { class: "act del", title: "削除", "aria-label": "削除", onclick: () => doDelete(e) }, svg("trash"))),
+      h("button", { class: "act ovf", "aria-label": "操作メニュー", onclick: () => openDetail(e) }, svg("more")));
     ul.append(row);
   }
   $("more").hidden = state.entries.length >= state.total;
@@ -138,7 +168,7 @@ async function openDetail(e) {
   const url = fileUrl(e.path);
   $("pv-download").hidden = e.is_dir; $("pv-download").href = fileUrl(e.path, true); $("pv-download").setAttribute("download", e.name);
   $("pv-hash").hidden = false;
-  if (e.is_dir) body.append(h("div", { class: "nopv" }, "📁 フォルダ"));
+  if (e.is_dir) body.append(h("div", { class: "nopv" }, withIcon("folder", "フォルダ")));
   else if (e.kind === "image") {
     const img = h("img", { src: url, alt: e.name });
     img.addEventListener("error", () => body.replaceChildren(h("div", { class: "nopv" }, "このブラウザではこの画像形式を表示できません（HEICなど）。ダウンロードしてご確認ください。")));
@@ -271,7 +301,7 @@ async function uploadOne(f, dest, el, item) {
     if (res.status !== 201) throw new Error(res.data?.error || `アップロード失敗 (${res.status})`);
     item.bar.style.width = "100%"; item.pct.textContent = "100%";
     const local = await localHash(f);
-    const check = local === null ? "" : local === res.data.sha256 ? " ✔ SHA-256一致" : " ⚠ SHA-256が一致しません";
+    const check = local === null ? "" : local === res.data.sha256 ? " ・ SHA-256一致" : " ・ SHA-256が一致しません";
     if (local !== null && local !== res.data.sha256) throw new Error("SHA-256が一致しません。再送してください");
     el.classList.add("done"); item.msg.textContent = `完了: ${res.data.name} (${fmtSize(res.data.size)})${check} sha256:${res.data.sha256.slice(0, 12)}…`;
   } catch (err) { el.classList.add("err"); item.msg.textContent = err.message; item.pct.textContent = "失敗"; }
@@ -290,7 +320,7 @@ $("search").addEventListener("input", (e) => { clearTimeout(st); st = setTimeout
 $("recursive").onchange = (e) => { state.recursive = e.target.checked; if (state.q) load(); };
 $("sort").value = state.sort;
 $("sort").onchange = (e) => { state.sort = e.target.value; localStorage.setItem("sf.sort", state.sort); load(); };
-const orderLabel = () => { $("order").textContent = state.order === "asc" ? "↑ 昇順" : "↓ 降順"; };
+const orderLabel = () => { $("order").replaceChildren(...(state.order === "asc" ? withIcon("up", "昇順") : withIcon("down", "降順"))); };
 orderLabel();
 $("order").onclick = () => { state.order = state.order === "asc" ? "desc" : "asc"; localStorage.setItem("sf.order", state.order); orderLabel(); load(); };
 $("btn-refresh").onclick = () => load().then(() => toast("更新しました"));

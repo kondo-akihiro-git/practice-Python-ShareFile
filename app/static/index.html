@@ -6,20 +6,21 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#2563eb">
 <title>シェアファイル</title>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <header class="top">
-  <div class="brand"><span class="logo" aria-hidden="true">📂</span><h1>シェアファイル</h1></div>
-  <button id="btn-refresh" class="icon-btn" title="更新" aria-label="更新">⟳</button>
+  <div class="brand"><span class="logo" aria-hidden="true"><i data-i="folder"></i></span><h1>シェアファイル</h1></div>
+  <button id="btn-refresh" class="icon-btn" title="更新" aria-label="更新"><i data-i="refresh"></i></button>
 </header>
 
 <main>
   <nav id="crumbs" class="crumbs" aria-label="現在のフォルダ"></nav>
 
   <section class="toolbar">
-    <button id="btn-upload" class="btn primary">⬆ アップロード</button>
-    <button id="btn-mkdir" class="btn">📁＋ フォルダ作成</button>
+    <button id="btn-upload" class="btn primary"><i data-i="upload"></i>アップロード</button>
+    <button id="btn-mkdir" class="btn"><i data-i="folder-plus"></i>フォルダ作成</button>
     <input id="search" type="search" placeholder="ファイル名で検索" aria-label="ファイル名で検索" autocomplete="off">
     <label class="chk"><input id="recursive" type="checkbox"> サブフォルダも</label>
     <div class="sort">
@@ -28,7 +29,7 @@
         <option value="mtime">更新日時</option>
         <option value="size">サイズ</option>
       </select>
-      <button id="order" class="btn" aria-label="昇順・降順の切り替え" title="昇順・降順">↑ 昇順</button>
+      <button id="order" class="btn" aria-label="昇順・降順の切り替え" title="昇順・降順">昇順</button>
     </div>
   </section>
 
@@ -85,16 +86,16 @@
 <dialog id="dlg-preview" class="preview">
   <div class="pv-head">
     <strong id="pv-name"></strong>
-    <button id="pv-close" class="icon-btn" aria-label="閉じる">✕</button>
+    <button id="pv-close" class="icon-btn" aria-label="閉じる"><i data-i="x"></i></button>
   </div>
   <div id="pv-body" class="pv-body"></div>
   <div id="pv-info" class="pv-info"></div>
   <div class="pv-actions">
-    <a id="pv-download" class="btn primary">⬇ ダウンロード</a>
+    <a id="pv-download" class="btn primary"><i data-i="download"></i>ダウンロード</a>
     <button id="pv-hash" class="btn">ℹ 情報 / SHA-256</button>
-    <button id="pv-rename" class="btn">✏ 名前変更</button>
-    <button id="pv-move" class="btn">📂 移動</button>
-    <button id="pv-delete" class="btn danger">🗑 削除</button>
+    <button id="pv-rename" class="btn"><i data-i="rename"></i>名前変更</button>
+    <button id="pv-move" class="btn"><i data-i="move"></i>移動</button>
+    <button id="pv-delete" class="btn danger"><i data-i="trash"></i>削除</button>
   </div>
 </dialog>
 
