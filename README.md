@@ -26,21 +26,21 @@ Tailscale VPNの中だけで動き、ログインは不要です。ファイル�
 ## 主な画面
 - `トップ画面（iPhone）` : ファイル・フォルダの一覧、アップロード、フォルダ作成、検索、並び替えをする画面
 <kbd>
-<img width="603" height="1311" alt="IMG_2296" src="https://github.com/user-attachments/assets/682afacc-12f5-4e40-aa8a-8811f81f9c91" />
+<img width="280" alt="IMG_2296" src="https://github.com/user-attachments/assets/682afacc-12f5-4e40-aa8a-8811f81f9c91" />
 </kbd>
 </br></br>
 
 
 - `アップロード画面（iPhone）` : 保存先フォルダとファイルを選んで送信する画面。完了するとSHA-256の一致を表示
 <kbd>
-<img width="603" height="1311" alt="IMG_2297" src="https://github.com/user-attachments/assets/b1ec5207-a9dc-4208-aa17-d2c86713a1f9" />
+<img width="280" alt="IMG_2297" src="https://github.com/user-attachments/assets/b1ec5207-a9dc-4208-aa17-d2c86713a1f9" />
 </kbd>
 </br></br>
 
 
 - `共有フォルダ（Ubuntu）` : iPhoneから送ったファイルが、ファイルマネージャーの`shared/`にそのまま入っている様子
 <kbd>
-<img width="933" height="274" alt="Screenshot from 2026-11-10 17-22-45" src="https://github.com/user-attachments/assets/04a232f2-00d7-48e0-a502-299c2b7715a7" />
+<img width="560" alt="Screenshot from 2026-11-10 17-22-45" src="https://github.com/user-attachments/assets/04a232f2-00d7-48e0-a502-299c2b7715a7" />
 </kbd>
 </br></br>
 
