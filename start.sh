@@ -126,6 +126,12 @@ fi
 if [ -t 0 ]; then
   echo
   echo "▼ アクセスログ（この画面を閉じても、サーバーは裏で動き続けます。停止は ShareFile-stop.desktop）"
-  exec tail -n 20 -F "$LOGDIR/server.log"
+  tail -n 20 -F "$LOGDIR/server.log" &
+  TAIL_PID=$!
+  SERVER_PID="$(cat "$PID_FILE")"
+  while kill -0 "$SERVER_PID" 2>/dev/null; do sleep 1; done
+  kill "$TAIL_PID" 2>/dev/null
+  echo; echo "■ シェアファイルは停止しました。この画面は閉じて構いません。"
+  sleep 5
 fi
 exit 0
